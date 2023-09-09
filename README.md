@@ -1,4 +1,2 @@
 # nDimensionalEquationFinder
-Take in a specific amount of points and output a polynomial equation that goes through all the points. Works in any n-dimensions.
-
-The purpose of this code is to create highly efficient machine-learning algorithms. By having a network record all of its input neurons, and the associated cost value and then input those into my algorithm, it should be possible to attain the exact cost function for a particular dataset. By doing this over multiple data sets, specific numbers found by the equation in my code, and averaging the equations, it should be possible to attain a naive estimate of the network's cost function. By taking the first or second derivative of this equation, it should be possible to find low local minima, or ideally, global minima. This should allow for large models to attain high efficiency without brute forcing or getting stuck in local minima gravity wells. 
+go to ExamplesAndExplainations.ipynb

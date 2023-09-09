@@ -85,7 +85,7 @@ class FindPolynomial:
       ax.set_xlabel('x')
       ax.set_ylabel('y')
       ax.scatter(input_vals[:, 0], output[:], c=output[:])
-
+        
       plt.ion()
       plt.show()
 
