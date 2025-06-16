@@ -30,7 +30,6 @@ class FindPolynomial:
           middle = (j//counter)%degree
           temp += letters[coNum] + sup[degree-middle-1]
           var[j, 0] = temp
-
     answers = np.linalg.inv(main) @ output
     
     fin = ""
@@ -47,7 +46,7 @@ class FindPolynomial:
   
   def find_equation(input_vals, output):
     '''
-    degree = degree :: dimensionality = dimensions :: input_vals = inputs (nx2; nx4):: output = output (always nx1 array)
+     input_vals = inputs (nx2; nx4):: output = output (always nx1 array)
     '''
     dimensionality = input_vals.shape[1] + 1
     degree = int(math.pow(input_vals.shape[0],1/(dimensionality-1)))
@@ -85,5 +84,51 @@ class FindPolynomial:
       plt.ion()
       plt.show()
 
+  def diffrentiate(input_vals, degree, numVars):
+      reordered_input_vals = np.zeros((input_vals.shape[0], numVars))
+      general = (degree+1)**(numVars)
+      for i in range(numVars):
+          for j in range(general):
+            baseArr = FindPolynomial.numberToBase(j, degree+1, numVars)
+            temp = baseArr[0]
+            baseArr[0] = baseArr[i]
+            baseArr[i] = temp #represents swapped index
+            reordered_input_vals[j][i] = input_vals[FindPolynomial.baseToNumber(baseArr, degree+1)][0] #normal index to swapped index
 
+      derivativeMatrix = np.zeros((general, general))
+      for i in range(general-(degree+1)**(numVars-1)):
+          derivativeMatrix[i + (degree+1)**(numVars-1)][i] = degree - ( (i) // ((degree+1)**(numVars-1)))
+      reordered_input_vals = derivativeMatrix @ reordered_input_vals
+
+      for i in range(numVars):
+          swapped = []
+          for j in range(general):
+            swapped.append((j, i))
+            baseArr = FindPolynomial.numberToBase(j, degree+1, numVars)
+            temp = baseArr[0]
+            baseArr[0] = baseArr[i]
+            baseArr[i] = temp #represents swapped index
+            if not (FindPolynomial.baseToNumber(baseArr, degree+1), i) in swapped:
+              temp = reordered_input_vals[j][i]
+              reordered_input_vals[j][i] = reordered_input_vals[FindPolynomial.baseToNumber(baseArr, degree+1)][i] 
+              reordered_input_vals[FindPolynomial.baseToNumber(baseArr, degree+1)][i] = temp
+      return reordered_input_vals
+
+
+  def numberToBase(n, b, dim):
+      if n == 0:
+          return [0]*dim
+      digits = [0] * dim
+      counter = 0
+      while n:
+          digits[counter] = int(n % b)
+          n //= b
+          counter += 1
+      return digits[::-1]
   
+  def baseToNumber(n, b):
+      sum = 0
+      for i in range(len(n)-1, 0, -1):
+          sum = sum + n[len(n)-i-1] * b**i
+      return sum + n[-1]
+    
