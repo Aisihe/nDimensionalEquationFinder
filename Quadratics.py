@@ -8,31 +8,27 @@ class FindPolynomial:
         '''
         input_vals = inputs (nx2; nx4):: output = output (always nx1 array)
         '''
-        dimensionality = input_vals.shape[1] + 1
-        degree = int(math.pow(input_vals.shape[0],1/(dimensionality-1)))
-        general = degree**(dimensionality-1)
-        dimSmall = dimensionality-1
+        numVars = input_vals.shape[1]
+        degree = int(math.pow(input_vals.shape[0],1/(numVars)))
+        general = degree**(numVars)
         
         main = np.ones([general, general])
 
         for i in range(general): #equation number
             for j in range(general): #equation element
-                counter = degree**np.arange(dimSmall)
-                middle = (j//counter)%degree
-                main[i, j] = np.prod(input_vals[i, :]**(degree-middle-1))
+                main[i, j] = np.prod(input_vals[i, :]**(np.array(FindPolynomial.numberToBase(general-j-1, degree, numVars))))
         
         sup = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"]          
         letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
         var = np.empty([general, 1], dtype='U100')
         for j in range(general): #equation element
             temp = ""
-        for coNum in range(dimSmall):
+        for coNum in range(numVars):
             counter = degree**coNum
             middle = (j//counter)%degree
             temp += letters[coNum] + sup[degree-middle-1]
             var[j, 0] = temp
         answers = np.linalg.inv(main) @ output
-        
         fin = ""
 
         for i in range(general):
@@ -49,18 +45,15 @@ class FindPolynomial:
         '''
         input_vals = inputs (nx2; nx4):: output = output (always nx1 array)
         '''
-        dimensionality = input_vals.shape[1] + 1
-        degree = int(math.pow(input_vals.shape[0],1/(dimensionality-1)))
-        general = degree**(dimensionality-1)
-        dimSmall = dimensionality-1
+        numVars = input_vals.shape[1]
+        degree = int(math.pow(input_vals.shape[0],1/(numVars))) - 1
+        general = degree**(numVars)
         
         main = np.ones([general, general])
 
         for i in range(general): #equation number
             for j in range(general): #equation element
-                counter = degree**np.arange(dimSmall)
-                middle = (j//counter)%degree
-                main[i, j] = np.prod(input_vals[i, :]**(degree-middle-1))
+                main[i, j] = np.prod(input_vals[i, :]**(np.array(FindPolynomial.numberToBase(general-j-1, degree + 1, numVars))))
 
         return(np.linalg.inv(main) @ output)
         
@@ -177,8 +170,6 @@ class FindPolynomial:
         for i in range(len(n)-1, 0, -1):
             sum = sum + n[len(n)-i-1] * b**i
         return sum + n[-1]
-    
-
    
     def newtonsMethod(polynomialArr): #find zeros of a function
         derivative = FindPolynomial.diffrentiate(polynomialArr, len(polynomialArr) - 1, 1)
