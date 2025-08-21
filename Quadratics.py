@@ -46,7 +46,7 @@ class FindPolynomial:
         input_vals = inputs (nx2; nx4):: output = output (always nx1 array)
         '''
         numVars = input_vals.shape[1]
-        degree = int(math.pow(input_vals.shape[0],1/(numVars))) - 1
+        degree = int(math.pow(input_vals.shape[0],1/(numVars)))
         general = degree**(numVars)
         
         main = np.ones([general, general])
@@ -54,7 +54,9 @@ class FindPolynomial:
         for i in range(general): #equation number
             for j in range(general): #equation element
                 main[i, j] = np.prod(input_vals[i, :]**(np.array(FindPolynomial.numberToBase(general-j-1, degree + 1, numVars))))
-
+        
+        print(np.shape(main))
+        print(np.shape(output))
         return(np.linalg.inv(main) @ output)
         
 
@@ -289,4 +291,3 @@ class FindPolynomial:
 
         return f" minimum value found: {min(output_vals)}"
             
- 
