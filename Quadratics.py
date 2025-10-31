@@ -30,7 +30,7 @@ class FindPolynomial:
             var[j, 0] = temp
         answers = np.linalg.inv(main) @ output
         fin = ""
-
+        print(answers)
         for i in range(general):
             if round(answers[i, 0], 10) == 0:
                 continue
@@ -55,8 +55,6 @@ class FindPolynomial:
             for j in range(general): #equation element
                 main[i, j] = np.prod(input_vals[i, :]**(np.array(FindPolynomial.numberToBase(general-j-1, degree + 1, numVars))))
         
-        print(np.shape(main))
-        print(np.shape(output))
         return(np.linalg.inv(main) @ output)
         
 
@@ -126,7 +124,10 @@ class FindPolynomial:
             
         plt.ion()
         plt.show()
+
     def diffrentiate(input_vals, degree, numVars):
+ 
+
         reordered_input_vals = np.zeros((input_vals.shape[0], numVars))
         general = (degree+1)**(numVars)
         for i in range(numVars):
@@ -135,7 +136,7 @@ class FindPolynomial:
                 temp = baseArr[0]
                 baseArr[0] = baseArr[i]
                 baseArr[i] = temp #represents swapped index
-                reordered_input_vals[j][i] = input_vals[FindPolynomial.baseToNumber(baseArr, degree+1)][0] #normal index to swapped index
+                reordered_input_vals[j][i] = input_vals[FindPolynomial.baseToNumber(baseArr, degree+1)] #normal index to swapped index
 
         derivativeMatrix = np.zeros((general, general))
         for i in range(general-(degree+1)**(numVars-1)):
